@@ -1,8 +1,9 @@
 import React from 'react';
 import { TrustEngineVisualization } from './TrustEngineVisualization';
+import type { SelectedEvidenceFiles } from '../utils/fileValidation';
 
 interface HeroSectionProps {
-  onStartInvestigation?: () => void;
+  onStartInvestigation?: (files: SelectedEvidenceFiles) => void;
   onExploreHowItWorks?: () => void;
 }
 

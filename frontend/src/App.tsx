@@ -12,9 +12,13 @@ import { SectionCTA } from './components/SectionCTA';
 import { Footer } from './components/Footer';
 import { InvestigationSandboxModal } from './components/ConnectedInvestigationSandboxModal';
 import { ContactModal } from './components/ContactModal';
+import type { SelectedEvidenceFiles } from './utils/fileValidation';
+
+const EMPTY_EVIDENCE_FILES: SelectedEvidenceFiles = {};
 
 export default function App() {
   const [isInvestigationOpen, setIsInvestigationOpen] = useState(false);
+  const [initialEvidenceFiles, setInitialEvidenceFiles] = useState<SelectedEvidenceFiles>(EMPTY_EVIDENCE_FILES);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState<string>('');
 
@@ -30,6 +34,16 @@ export default function App() {
     }
   };
 
+  const openInvestigation = (files: SelectedEvidenceFiles = EMPTY_EVIDENCE_FILES) => {
+    setInitialEvidenceFiles(files);
+    setIsInvestigationOpen(true);
+  };
+
+  const closeInvestigation = () => {
+    setIsInvestigationOpen(false);
+    setInitialEvidenceFiles(EMPTY_EVIDENCE_FILES);
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-neutral-800 selection:text-white font-sans overflow-x-hidden">
       {/* Background subtle technical grid */}
@@ -39,12 +53,12 @@ export default function App() {
       <div className="relative z-10">
         <Navbar 
           onOpenContact={() => setIsContactOpen(true)}
-          onOpenInvestigation={() => setIsInvestigationOpen(true)}
+          onOpenInvestigation={() => openInvestigation()}
         />
 
         <main>
           <HeroSection 
-            onStartInvestigation={() => setIsInvestigationOpen(true)}
+            onStartInvestigation={openInvestigation}
           />
 
           <SectionEvidenceGraph />
@@ -55,21 +69,22 @@ export default function App() {
           <SectionGeneralization />
           <SectionPricing onSelectTier={handleSelectTier} />
           <SectionCTA 
-            onStartInvestigation={() => setIsInvestigationOpen(true)}
+            onStartInvestigation={() => openInvestigation()}
             onExplorePlatform={handleExplorePlatform}
           />
         </main>
 
         <Footer 
           onOpenContact={() => setIsContactOpen(true)}
-          onOpenInvestigation={() => setIsInvestigationOpen(true)}
+          onOpenInvestigation={() => openInvestigation()}
         />
       </div>
 
       {/* Modals */}
       <InvestigationSandboxModal 
         isOpen={isInvestigationOpen}
-        onClose={() => setIsInvestigationOpen(false)}
+        initialFiles={initialEvidenceFiles}
+        onClose={closeInvestigation}
       />
 
       <ContactModal 

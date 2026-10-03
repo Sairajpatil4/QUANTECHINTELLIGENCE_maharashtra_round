@@ -1,4 +1,5 @@
 export type ModalityType = 'document' | 'image' | 'video' | 'audio' | 'text';
+export type SelectedEvidenceFiles = Partial<Record<ModalityType, File>>;
 
 export interface ValidationResult {
   isValid: boolean;

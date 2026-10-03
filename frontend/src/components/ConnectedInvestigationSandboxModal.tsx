@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Activity,
   AlertCircle,
@@ -24,11 +24,13 @@ import {
   MODALITY_CONFIGS,
   validateModalityFile,
   type ModalityType,
+  type SelectedEvidenceFiles,
 } from '../utils/fileValidation';
 
 interface SandboxProps {
   isOpen: boolean;
   onClose: () => void;
+  initialFiles: SelectedEvidenceFiles;
 }
 
 const presets = [
@@ -50,7 +52,7 @@ const modalities: Array<{
   { id: 'document', label: 'Document', icon: FileText, helper: 'Sent as text evidence' },
 ];
 
-type SelectedFiles = Partial<Record<ModalityType, File>>;
+type SelectedFiles = SelectedEvidenceFiles;
 
 function displayValue(value: unknown): string {
   if (typeof value === 'string') return value;
@@ -64,10 +66,10 @@ function findingLabel(finding: Record<string, unknown>): string {
   return label === undefined ? displayValue(finding) : displayValue(label);
 }
 
-export function InvestigationSandboxModal({ isOpen, onClose }: SandboxProps) {
+export function InvestigationSandboxModal({ isOpen, onClose, initialFiles }: SandboxProps) {
   const [selectedPreset, setSelectedPreset] = useState<(typeof presets)[number]['id']>('exec');
-  const [title, setTitle] = useState(presets[0].title);
-  const [description, setDescription] = useState(presets[0].description);
+  const [title, setTitle] = useState<string>(presets[0].title);
+  const [description, setDescription] = useState<string>(presets[0].description);
   const [selectedFiles, setSelectedFiles] = useState<SelectedFiles>({});
   const [uploadedFiles, setUploadedFiles] = useState<Set<ModalityType>>(new Set());
   const [activeModality, setActiveModality] = useState<ModalityType>('image');
@@ -77,6 +79,16 @@ export function InvestigationSandboxModal({ isOpen, onClose }: SandboxProps) {
   const [error, setError] = useState<string | null>(null);
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setSelectedFiles(initialFiles);
+    setUploadedFiles(new Set());
+    setInvestigationId(null);
+    setResult(null);
+    setError(null);
+    setValidationMessage(null);
+  }, [initialFiles, isOpen]);
 
   if (!isOpen) return null;
 

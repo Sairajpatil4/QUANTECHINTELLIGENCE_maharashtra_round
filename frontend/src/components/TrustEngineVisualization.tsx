@@ -13,7 +13,7 @@ import {
   Upload,
   X
 } from 'lucide-react';
-import { validateModalityFile, ModalityType, MODALITY_CONFIGS } from '../utils/fileValidation';
+import { validateModalityFile, ModalityType, MODALITY_CONFIGS, type SelectedEvidenceFiles } from '../utils/fileValidation';
 
 interface NodeItem {
   id: string;
@@ -29,7 +29,7 @@ interface NodeItem {
 }
 
 interface TrustEngineVisualizationProps {
-  onStartInvestigation?: () => void;
+  onStartInvestigation?: (files: SelectedEvidenceFiles) => void;
 }
 
 export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> = ({
@@ -50,6 +50,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
     file?: File;
   } | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string>>({});
+  const [selectedFiles, setSelectedFiles] = useState<SelectedEvidenceFiles>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
     setSelectedUploadModality(nodeId as ModalityType);
     setValidationAlert(null);
     if (fileInputRef.current) {
+      fileInputRef.current.accept = MODALITY_CONFIGS[nodeId as ModalityType].accept;
       fileInputRef.current.value = '';
       fileInputRef.current.click();
     }
@@ -87,6 +89,10 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       });
     } else {
       // Acceptance with ledger status update
+      setSelectedFiles(prev => ({
+        ...prev,
+        [selectedUploadModality]: file,
+      }));
       setUploadedFiles(prev => ({
         ...prev,
         [selectedUploadModality]: file.name,
@@ -104,6 +110,10 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
   const handleRouteToModality = (targetModality: ModalityType, file: File) => {
     const result = validateModalityFile(targetModality, file);
     if (result.isValid) {
+      setSelectedFiles(prev => ({
+        ...prev,
+        [targetModality]: file,
+      }));
       setUploadedFiles(prev => ({
         ...prev,
         [targetModality]: file.name,
@@ -679,7 +689,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
         <g 
           id="central-drum" 
           className="select-none cursor-pointer group"
-          onClick={() => onStartInvestigation?.()}
+          onClick={() => onStartInvestigation?.(selectedFiles)}
           onMouseEnter={() => setIsCentralHovered(true)}
           onMouseLeave={() => setIsCentralHovered(false)}
         >
