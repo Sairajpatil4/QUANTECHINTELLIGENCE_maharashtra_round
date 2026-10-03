@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Protocol, Sequence
 
 from app.schemas.evidence import AnalysisResult, EvidenceType, StructuredEvidence
@@ -28,6 +29,25 @@ class FusionIntegration(Protocol):
 		...
 
 
+class UnconfiguredAnalyzer:
+	def analyze(
+		self,
+		*,
+		evidence_id: str,
+		file_path: str,
+		evidence_type: EvidenceType,
+	) -> StructuredEvidence:
+		return StructuredEvidence(
+			evidence_id=evidence_id,
+			type=evidence_type,
+			filename=Path(file_path).name,
+			limitations=[
+				f"No {evidence_type} analyzer is configured; "
+				"authenticity analysis was not performed."
+			],
+		)
+
+
 class UnavailableAnalyzer:
 	def analyze(
 		self,
@@ -51,7 +71,7 @@ class UnavailableFusion:
 		raise IntegrationUnavailable("The evidence fusion implementation is not configured.")
 
 
-_analyzer: AnalyzerIntegration = UnavailableAnalyzer()
+_analyzer: AnalyzerIntegration = UnconfiguredAnalyzer()
 _fusion: FusionIntegration = UnavailableFusion()
 
 

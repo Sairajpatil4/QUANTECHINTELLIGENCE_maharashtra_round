@@ -16,4 +16,4 @@ SQLite is initialized automatically at `backend/trustlayer.db`. Uploaded evidenc
 
 ## Analysis integrations
 
-Register implementations of `AnalyzerIntegration` and `FusionIntegration` from `app.services.integrations` during application startup. Until configured, analysis is recorded as failed/incomplete with explicit limitations; no authenticity assessment is fabricated.
+Register implementations of `AnalyzerIntegration` and `FusionIntegration` from `app.services.integrations` during application startup. Until a modality analyzer is configured, uploaded evidence is passed to fusion with an explicit limitation and receives an inconclusive assessment; no authenticity finding is fabricated.
