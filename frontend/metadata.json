@@ -1,0 +1,7 @@
+{
+  "name": "TrustLayer — Digital Authenticity, Reconstructed",
+  "description": "Multimodal AI platform for digital authenticity and forensic investigation. Analyze images, video, audio, documents, and metadata as connected evidence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
