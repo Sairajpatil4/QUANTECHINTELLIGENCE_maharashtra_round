@@ -42,33 +42,33 @@ export const SectionCTA: React.FC<CTAProps> = ({
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 text-center flex flex-col items-center">
         
         <div className="text-xs font-mono tracking-[0.24em] uppercase text-[#737373] mb-4">
-          CONNECTED FORENSICS PLATFORM
+          FROM DETECTION. TO INVESTIGATION.
         </div>
 
         {/* Headline */}
         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.08] mb-6 font-sans max-w-3xl">
-          WHAT DOES<br />
-          THE EVIDENCE SAY?
+          DON'T JUST DETECT.<br />
+          INVESTIGATE.
         </h2>
 
         {/* Supporting text */}
         <p className="text-base sm:text-lg text-[#8A8A8A] max-w-xl mb-10 font-sans leading-relaxed">
-          Investigate digital content as connected evidence, not isolated files.
+          Move beyond isolated detection. Investigate digital evidence, connect signals, and understand what the evidence actually supports.
         </p>
 
         {/* Buttons (Glassmorphic System) */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={onStartInvestigation}
-            className="glass-btn-primary inline-flex items-center gap-2 h-10 px-5 text-xs font-semibold rounded-[2px]"
+            className="glass-btn-primary inline-flex items-center gap-2 h-10 px-5 text-xs font-semibold rounded-full"
           >
-            <span>Start Investigation</span>
+            <span>Start an Investigation</span>
             <ArrowRight className="w-3.5 h-3.5 text-black" />
           </button>
 
           <button
             onClick={onExplorePlatform}
-            className="glass-btn inline-flex items-center justify-center h-10 px-5 text-xs font-medium text-white rounded-[2px]"
+            className="glass-btn inline-flex items-center justify-center h-10 px-5 text-xs font-medium text-white rounded-full"
           >
             <span>Explore How It Works</span>
           </button>

@@ -1,57 +1,39 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Scissors, Network, HelpCircle, Shield } from 'lucide-react';
+import { CheckCircle2, Network, HelpCircle, Shield } from 'lucide-react';
 
 export const SectionUncertainty: React.FC = () => {
-  const [selectedState, setSelectedState] = useState<number>(3); // default to insufficient evidence to highlight epistemic humility
+  const [selectedState, setSelectedState] = useState<number>(2);
 
   const states = [
     {
-      id: 'authentic',
-      title: 'AUTHENTIC',
+      id: 'evidence-aware',
+      title: 'EVIDENCE-AWARE',
       icon: CheckCircle2,
-      tag: 'Full Physical Parity',
-      color: 'text-emerald-400',
-      borderColor: 'border-emerald-800/40',
-      bgColor: 'bg-emerald-950/20',
-      summary: 'All captured modalities correspond directly to verifiable physical events.',
-      description: 'Sensor noise matches camera serial, lighting azimuth matches UTC timestamp, and lip movements match acoustic formants with zero synthetic residuals.',
-      decisionThreshold: 'Entropy > 94% across all 6 modality streams'
+      tag: 'Grounded in available signals',
+      color: 'text-cyan-300',
+      summary: 'Every assessment is grounded in available evidence signals rather than a single detector output.',
+      description: 'TrustLayer treats model outputs as one source of information. Their meaning depends on the evidence, context, and limitations in the investigation.',
+      decisionThreshold: 'Signals are not standalone proof'
     },
     {
-      id: 'manipulated',
-      title: 'MANIPULATED',
-      icon: Scissors,
-      tag: 'Localized Tampering',
-      color: 'text-orange-400',
-      borderColor: 'border-orange-800/40',
-      bgColor: 'bg-orange-950/20',
-      summary: 'An authentic baseline capture has had localized segments inserted, spliced, or deleted.',
-      description: 'Background environment and device metadata are legitimate, but specific bounding boxes (e.g. face swaps or document signatures) display localized editing boundaries.',
-      decisionThreshold: 'Discrete spatial/temporal boundary anomaly detected'
-    },
-    {
-      id: 'coordinated',
-      title: 'COORDINATED SYNTHETIC',
+      id: 'cross-modal',
+      title: 'CROSS-MODAL',
       icon: Network,
-      tag: 'Multi-Modal Generation',
-      color: 'text-amber-400',
-      borderColor: 'border-amber-800/40',
-      bgColor: 'bg-amber-950/20',
-      summary: 'Multiple synthetic modalities generated simultaneously to fabricate a non-existent event.',
-      description: 'Generative AI produces synchronous synthetic voice, synthetic video, and forged metadata. Detected through micro-desynchronizations in underlying physics and formant timings.',
-      decisionThreshold: 'Synthetic generator signatures verified across multiple assets'
+      tag: 'Relationships across evidence',
+      color: 'text-cyan-300',
+      summary: 'Signals from different evidence types can be connected to reveal relationships and inconsistencies.',
+      description: 'Cross-modal reasoning helps organize related sources and questions for review without converting a correlation into an unsupported conclusion.',
+      decisionThreshold: 'Connections require interpretation'
     },
     {
-      id: 'insufficient',
-      title: 'INSUFFICIENT EVIDENCE',
+      id: 'uncertainty-aware',
+      title: 'UNCERTAINTY-AWARE',
       icon: HelpCircle,
-      tag: 'Epistemic Humility',
+      tag: 'Limitations remain visible',
       color: 'text-neutral-300',
-      borderColor: 'border-neutral-700',
-      bgColor: 'bg-neutral-900/50',
-      summary: 'When compression, resolution, or signal entropy is too low, TrustLayer refuses to guess.',
-      description: 'Adversarial systems often rely on extreme re-compression to destroy forensic artifacts. TrustLayer quantifies informational entropy and alerts the investigator rather than hallucinating a false verdict.',
-      decisionThreshold: 'Information loss exceeds forensic certainty bounds'
+      summary: 'TrustLayer communicates limitations instead of presenting complex investigations as absolute truth.',
+      description: 'When sources are absent, degraded, or incomplete, that uncertainty belongs in the assessment. Absence of evidence is not proof of authenticity or manipulation.',
+      decisionThreshold: 'State what remains unknown'
     },
   ];
 
@@ -62,20 +44,19 @@ export const SectionUncertainty: React.FC = () => {
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
           <div className="text-xs font-mono tracking-[0.2em] uppercase text-[#737373] mb-3">
-            EPISTEMIC CALIBRATION
+            EVIDENCE, CONTEXT & LIMITATIONS
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] mb-6 font-sans">
-            KNOW WHEN<br />
-            YOU DON'T KNOW.
+            TRUST PRINCIPLES.<br />
+            EVIDENCE BEFORE CONCLUSIONS.
           </h2>
           <p className="text-base sm:text-lg text-[#8A8A8A] leading-relaxed max-w-2xl font-sans">
-            A reliable forensic system must know the limits of its own perception. 
-            TrustLayer mathematically bounds uncertainty and never forces a conclusion when evidence is degraded or absent.
+            Detector and model outputs are signals, not absolute truth. TrustLayer keeps confidence, context, and limitations visible when evidence is incomplete or uncertain.
           </p>
         </div>
 
         {/* 4 States Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {states.map((st, idx) => {
             const isSelected = selectedState === idx;
             const Icon = st.icon;
@@ -111,7 +92,7 @@ export const SectionUncertainty: React.FC = () => {
 
                 <div className="pt-4 border-t border-white/[0.08] space-y-2">
                   <div className="text-[9px] font-mono uppercase text-[#666]">
-                    BOUNDING CRITERIA
+                    INVESTIGATION NOTE
                   </div>
                   <div className="text-[11px] font-mono text-neutral-300">
                     {st.decisionThreshold}

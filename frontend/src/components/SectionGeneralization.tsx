@@ -4,29 +4,29 @@ import { ArrowDown, Cpu, Sparkles, ShieldCheck } from 'lucide-react';
 export const SectionGeneralization: React.FC = () => {
   const steps = [
     {
-      title: 'KNOWN PATTERNS',
-      subtitle: 'Existing GAN, Diffusion & Vocoder Artifacts',
-      detail: 'Traditional detectors memorize specific model weights and generator fingerprints. When generators update, detection degrades.'
+      title: 'AVAILABLE EVIDENCE',
+      subtitle: 'Images · Video · Audio · Documents · Text · Metadata',
+      detail: 'An investigation begins with the sources available. Each source may contain signals, context, or gaps that affect what can be assessed.'
     },
     {
-      title: 'TRAINING',
-      subtitle: 'Physical & Causal Invariant Modeling',
-      detail: 'Rather than memorizing pixel artifacts, TrustLayer trains models to recognize physical conservation laws, optical mechanics, and temporal causality.'
+      title: 'EVIDENCE SIGNALS',
+      subtitle: 'Indicators with context',
+      detail: 'Model and detector outputs are treated as signals to examine alongside source context, not as independent proof or a complete account.'
     },
     {
       title: 'TRUSTLAYER',
-      subtitle: 'Cross-Modal Relational Reasoning Engine',
-      detail: 'Operates as an overarching arbiter comparing sensory streams against real-world physics and cross-modal consistency.'
+      subtitle: 'Cross-Modal Reasoning',
+      detail: 'Connect related evidence to examine correlations, inconsistencies, and contextual support across modalities.'
     },
     {
-      title: 'UNSEEN PATTERNS',
-      subtitle: 'Zero-Day Generative Architectures',
-      detail: 'When novel generation methods emerge that leave zero known artifact signatures, their cross-modal relationships still break real-world physics.'
+      title: 'INVESTIGATION CONTEXT',
+      subtitle: 'Relationships · provenance · limitations',
+      detail: 'Relationships may suggest questions for further review. They do not establish a conclusive account of how content was created.'
     },
     {
-      title: 'GENERALIZATION',
-      subtitle: 'Robust Long-Horizon Detection',
-      detail: 'Guarantees resilience against future AI generations without requiring continuous retraining or retraining lag.'
+      title: 'TRUST ASSESSMENT',
+      subtitle: 'Explainable and uncertainty-aware',
+      detail: 'Summarize what the evidence supports, what remains uncertain, and which limitations constrain the assessment.'
     },
   ];
 
@@ -37,15 +37,14 @@ export const SectionGeneralization: React.FC = () => {
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
           <div className="text-xs font-mono tracking-[0.2em] uppercase text-[#737373] mb-3">
-            RESEARCH & GENERALIZATION
+            FROM DETECTION. TO INVESTIGATION.
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] mb-6 font-sans">
-            BUILT FOR<br />
-            UNSEEN MANIPULATION.
+            EVERY SIGNAL TELLS<br />
+            PART OF THE STORY.
           </h2>
           <p className="text-base sm:text-lg text-[#8A8A8A] leading-relaxed max-w-2xl font-sans">
-            Detection models that memorize training distributions fail against tomorrow's generative engines. 
-            TrustLayer models invariant causal physics across modalities, enabling zero-shot generalization.
+            TrustLayer connects available evidence signals into an explainable investigation, communicating uncertainty and limitations instead of claiming certainty.
           </p>
         </div>
 
@@ -98,10 +97,10 @@ export const SectionGeneralization: React.FC = () => {
           <div className="mt-10 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div className="flex items-center gap-2 text-xs font-mono text-[#8A8A8A]">
               <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>THEORETICAL FOUNDATION // PHYSICAL INVARIANT CONSTRAINTS</span>
+              <span>INVESTIGATION PRINCIPLE // EVIDENCE BEFORE CONCLUSIONS</span>
             </div>
             <div className="text-[11px] font-mono text-[#666]">
-              PUBLISHED RESEARCH WORKING PAPERS AVAILABLE UPON REQUEST
+              IMAGE · VIDEO · AUDIO · DOCUMENT · TEXT · METADATA
             </div>
           </div>
 

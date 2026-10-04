@@ -1,11 +1,10 @@
 import React from 'react';
 
 interface FooterProps {
-  onOpenContact: () => void;
   onOpenInvestigation: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenContact, onOpenInvestigation }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenInvestigation }) => {
   const handleScroll = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -33,64 +32,35 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact, onOpenInvestigati
               Digital authenticity, reconstructed.
             </p>
             <div className="text-[11px] text-[#666] font-mono leading-relaxed pt-2">
-              Cross-modal causal reasoning architecture for synthetic media forensics and automated evidence reconstruction.
+              Evidence-led digital authenticity investigations across images, video, audio, documents, text, and metadata.
             </div>
           </div>
 
           {/* Links Grid */}
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-xs font-mono">
-            <a
-              href="#product"
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll('#product');
-              }}
-              className="hover:text-white transition-colors"
-            >
-              Product
-            </a>
-            <a
-              href="#capabilities"
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll('#capabilities');
-              }}
-              className="hover:text-white transition-colors"
-            >
-              Capabilities
-            </a>
-            <a
-              href="#how-it-works"
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll('#how-it-works');
-              }}
-              className="hover:text-white transition-colors"
-            >
-              How It Works
-            </a>
-            <a
-              href="#investigations"
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll('#investigations');
-              }}
-              className="hover:text-white transition-colors"
-            >
-              Investigations
-            </a>
-            <a
-              href="#research"
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll('#research');
-              }}
-              className="hover:text-white transition-colors"
-            >
-              Research
-            </a>
+            {[
+              ['Platform', '#product'],
+              ['How It Works', '#capabilities'],
+              ['Evidence', '#how-it-works'],
+              ['Investigation', '#investigations'],
+              ['About', '#research'],
+              ['Privacy', '#privacy'],
+              ['Terms', '#terms'],
+            ].map(([label, href]) => (
+              <a
+                key={label}
+                href={href}
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleScroll(href);
+                }}
+                className="hover:text-white transition-colors"
+              >
+                {label}
+              </a>
+            ))}
             <button
-              onClick={onOpenContact}
+              onClick={onOpenInvestigation}
               className="hover:text-white transition-colors text-left"
             >
               Contact
@@ -107,7 +77,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact, onOpenInvestigati
           </div>
 
           <div>
-            © 2026 TrustLayer. All rights reserved.
+            © 2026 TrustLayer
           </div>
 
         </div>

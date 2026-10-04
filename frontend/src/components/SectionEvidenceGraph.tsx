@@ -36,6 +36,12 @@ interface Edge {
 export const SectionEvidenceGraph: React.FC = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>('video');
 
+  const statusLabel = (status: GraphNode['status']) => {
+    if (status === 'conflict') return 'POTENTIAL INCONSISTENCY';
+    if (status === 'consistent') return 'SIGNALS ALIGN';
+    return 'CONTEXT NEEDED';
+  };
+
   const nodes: GraphNode[] = [
     {
       id: 'image',
@@ -44,9 +50,9 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 220,
       y: 110,
       status: 'conflict',
-      role: 'Sensor noise & lighting',
-      observation: 'Directional shadow vectors on background wall misaligned with solar azimuth.',
-      connectedTo: ['video', 'metadata', 'identity'],
+      role: 'Visual signals & context',
+      observation: 'Compare visible lighting and scene details with related sources and available context.',
+      connectedTo: ['video', 'metadata', 'context'],
     },
     {
       id: 'video',
@@ -55,9 +61,9 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 500,
       y: 90,
       status: 'conflict',
-      role: 'Optical flow & lip motion',
-      observation: 'Viseme transitions lag corresponding acoustic phonemes by 140ms.',
-      connectedTo: ['image', 'audio', 'timestamp', 'identity'],
+      role: 'Frame-level signals',
+      observation: 'Review timing and visual relationships alongside any related audio evidence.',
+      connectedTo: ['image', 'audio', 'timestamp', 'context'],
     },
     {
       id: 'audio',
@@ -66,20 +72,20 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 780,
       y: 120,
       status: 'conflict',
-      role: 'Acoustic timbre & harmonics',
-      observation: 'Vocoder phase cutoff detected at 16.2kHz; synthetic acoustic clone of target.',
-      connectedTo: ['video', 'transcript', 'identity'],
+      role: 'Acoustic context',
+      observation: 'Acoustic indicators should be interpreted in the context of source quality and related material.',
+      connectedTo: ['video', 'text', 'context'],
     },
     {
-      id: 'identity',
-      label: 'IDENTITY',
+      id: 'context',
+      label: 'CONTEXT',
       icon: UserCheck,
       x: 500,
       y: 260,
       status: 'consistent',
-      role: 'Biometric anchor points',
-      observation: 'Facial bone ratios and voice timbre match verified reference archive of subject.',
-      connectedTo: ['image', 'video', 'audio', 'transcript'],
+      role: 'Supporting information',
+      observation: 'Context can support or complicate an interpretation; its source and reliability should be reviewed.',
+      connectedTo: ['image', 'video', 'audio', 'text'],
     },
     {
       id: 'metadata',
@@ -88,8 +94,8 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 180,
       y: 380,
       status: 'conflict',
-      role: 'EXIF, GPS, camera serial',
-      observation: 'Encoding software signature shows ffmpeg remuxing 4 hours post-capture.',
+      role: 'EXIF & source details',
+      observation: 'Metadata can be incomplete or changed. Review it alongside the original source and other records.',
       connectedTo: ['image', 'timestamp', 'document'],
     },
     {
@@ -99,8 +105,8 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 500,
       y: 420,
       status: 'conflict',
-      role: 'Temporal chronology',
-      observation: 'Reported recording timestamp occurs prior to verified weather phenomena seen in frame.',
+      role: 'Dates & chronology',
+      observation: 'Compare timestamps across sources while accounting for missing or transformed metadata.',
       connectedTo: ['video', 'metadata', 'document'],
     },
     {
@@ -110,9 +116,9 @@ export const SectionEvidenceGraph: React.FC = () => {
       x: 820,
       y: 370,
       status: 'uncertain',
-      role: 'Semantic syntax & jargon',
-      observation: 'Language patterns display elevated lexical repetition characteristic of LLM generation.',
-      connectedTo: ['audio', 'identity', 'document'],
+      role: 'Meaning & consistency',
+      observation: 'Text may provide context, but language patterns alone do not establish how content was created.',
+      connectedTo: ['audio', 'context', 'document'],
     },
     {
       id: 'document',
@@ -122,7 +128,7 @@ export const SectionEvidenceGraph: React.FC = () => {
       y: 560,
       status: 'consistent',
       role: 'Accompanying PDF charter',
-      observation: 'Cryptographic PDF certificate matches corporate key, but referenced video link is disputed.',
+      observation: 'Review document structure and referenced sources; no provenance conclusion is implied by this example.',
       connectedTo: ['metadata', 'timestamp', 'text'],
     },
   ];
@@ -131,9 +137,9 @@ export const SectionEvidenceGraph: React.FC = () => {
     { from: 'image', to: 'video', label: 'Frame-to-stream coherence', status: 'conflict' },
     { from: 'video', to: 'audio', label: 'Phoneme-viseme sync', status: 'conflict' },
     { from: 'audio', to: 'text', label: 'Acoustic-semantic alignment', status: 'uncertain' },
-    { from: 'identity', to: 'image', label: 'Facial landmarks', status: 'consistent' },
-    { from: 'identity', to: 'video', label: 'Micro-expressions', status: 'conflict' },
-    { from: 'identity', to: 'audio', label: 'Voice biometric profile', status: 'conflict' },
+    { from: 'context', to: 'image', label: 'Supporting context', status: 'uncertain' },
+    { from: 'context', to: 'video', label: 'Related source context', status: 'uncertain' },
+    { from: 'context', to: 'audio', label: 'Contextual comparison', status: 'uncertain' },
     { from: 'metadata', to: 'image', label: 'Sensor noise & EXIF', status: 'conflict' },
     { from: 'metadata', to: 'timestamp', label: 'UTC capture log', status: 'conflict' },
     { from: 'timestamp', to: 'video', label: 'Solar lighting time', status: 'conflict' },
@@ -157,14 +163,14 @@ export const SectionEvidenceGraph: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
             <div className="text-xs font-mono tracking-[0.2em] uppercase text-[#737373] mb-3">
-              CROSS-MODAL REASONING MATRIX
+              ILLUSTRATIVE EVIDENCE GRAPH
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] mb-4 font-sans">
               THE SIGNAL<br />
               IS IN THE CONNECTION.
             </h2>
             <p className="text-base text-[#8A8A8A] leading-relaxed font-sans">
-              Hover over any modality node to trace its physical, temporal, and semantic relationships across the evidence graph.
+              Explore how image, video, audio, text, document, and metadata signals may relate. Example relationships are illustrative and not findings about a submitted file.
             </p>
           </div>
 
@@ -172,11 +178,11 @@ export const SectionEvidenceGraph: React.FC = () => {
           <div className="flex items-center gap-4 text-[11px] font-mono p-2 bg-[#0D0D0D] border border-[#242424] rounded-md">
             <div className="flex items-center gap-1.5 text-emerald-400">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>CONSISTENT</span>
+              <span>SIGNALS ALIGN</span>
             </div>
             <div className="flex items-center gap-1.5 text-amber-400">
               <AlertTriangle className="w-3.5 h-3.5" />
-              <span>CONFLICT</span>
+              <span>POTENTIAL INCONSISTENCY</span>
             </div>
             <div className="flex items-center gap-1.5 text-neutral-400">
               <HelpCircle className="w-3.5 h-3.5" />
@@ -364,7 +370,7 @@ export const SectionEvidenceGraph: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Link2 className="w-4 h-4 text-white" />
                 <span className="text-xs font-mono font-bold tracking-wider uppercase text-white">
-                  RELATIONAL INSPECTOR
+                  EVIDENCE GRAPH
                 </span>
               </div>
               <span className="text-[10px] font-mono text-[#666]">
@@ -388,7 +394,7 @@ export const SectionEvidenceGraph: React.FC = () => {
                         ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/40'
                         : 'bg-neutral-900 text-neutral-300 border-neutral-700'
                     }`}>
-                      {selectedNodeObj.status}
+                      {statusLabel(selectedNodeObj.status)}
                     </span>
                   </div>
                   <div className="text-xs font-mono text-[#8A8A8A]">
@@ -399,7 +405,7 @@ export const SectionEvidenceGraph: React.FC = () => {
                 {/* Forensic Observation */}
                 <div className="bg-[#050505] p-4 rounded-md border border-[#1A1A1A] space-y-2">
                   <div className="text-[10px] font-mono uppercase text-[#737373]">
-                    FORENSIC OBSERVATION
+                    ILLUSTRATIVE SIGNAL
                   </div>
                   <p className="text-xs text-[#d1d1d1] leading-relaxed font-sans">
                     {selectedNodeObj.observation}
@@ -426,9 +432,9 @@ export const SectionEvidenceGraph: React.FC = () => {
                             <span className="font-mono text-white font-medium">{targetNode.label}</span>
                           </div>
                           <span className={`text-[10px] font-mono uppercase ${
-                            targetNode.status === 'conflict' ? 'text-amber-400' : 'text-emerald-400'
+                            targetNode.status === 'conflict' ? 'text-amber-400' : targetNode.status === 'consistent' ? 'text-emerald-400' : 'text-neutral-400'
                           }`}>
-                            {targetNode.status}
+                            {statusLabel(targetNode.status)}
                           </span>
                         </div>
                       );
@@ -438,13 +444,13 @@ export const SectionEvidenceGraph: React.FC = () => {
 
                 {/* Deep explanation */}
                 <div className="text-[11px] text-[#737373] leading-relaxed pt-3 border-t border-[#1C1C1C]">
-                  TrustLayer computes directional graph invariant weights across all connected edges. When multi-modal invariants break physical conservation laws, synthetic coordination is declared.
+                  Relationships in an evidence graph help organize an investigation. They do not independently prove authenticity or manipulation.
                 </div>
 
               </div>
             ) : (
               <div className="text-xs font-mono text-[#666] py-12 text-center">
-                Select or hover over any node in the graph to inspect cross-modal correlation telemetry.
+                Select or hover over a node to explore illustrative evidence relationships.
               </div>
             )}
 

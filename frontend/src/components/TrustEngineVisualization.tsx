@@ -100,7 +100,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       setValidationAlert({
         type: 'success',
         title: `FIELD VALIDATION PASSED // ${selectedUploadModality.toUpperCase()}`,
-        message: `"${file.name}" verified and accepted into the ${selectedUploadModality.toUpperCase()} cryptographic evidence pipeline.`,
+        message: `"${file.name}" is ready for an investigation as ${selectedUploadModality.toUpperCase()} evidence. File selection does not verify authenticity or provenance.`,
         modality: selectedUploadModality,
         file: file,
       });
@@ -122,7 +122,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       setValidationAlert({
         type: 'success',
         title: `ROUTED & VERIFIED // ${targetModality.toUpperCase()} ENCLAVE`,
-        message: `Successfully routed "${file.name}" to the ${targetModality.toUpperCase()} stream. Cryptographic hash SHA-256 generated.`,
+        message: `"${file.name}" is ready for the ${targetModality.toUpperCase()} evidence stream. Authenticity and provenance have not been verified.`,
         modality: targetModality,
         file: file,
       });
@@ -141,7 +141,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       y: 195,
       portX: 275,
       portY: 220,
-      statusAnnotation: 'VISUAL CONSISTENCY',
+      statusAnnotation: 'VISUAL EVIDENCE',
       annotationPos: { x: 175, y: 170, align: 'end' },
       status: 'consistent',
     },
@@ -153,7 +153,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       y: 110,
       portX: 500,
       portY: 155,
-      statusAnnotation: 'SYNTHETIC SIGNAL',
+      statusAnnotation: 'DOCUMENT CONTEXT',
       annotationPos: { x: 500, y: 75, align: 'middle' },
       status: 'conflict',
     },
@@ -165,7 +165,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       y: 195,
       portX: 725,
       portY: 220,
-      statusAnnotation: 'AUDIO / VIDEO SYNC',
+      statusAnnotation: 'RELATIONSHIP REVIEW',
       annotationPos: { x: 825, y: 170, align: 'start' },
       status: 'conflict',
     },
@@ -177,7 +177,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       y: 470,
       portX: 710,
       portY: 450,
-      statusAnnotation: 'SEMANTIC COHERENCE',
+      statusAnnotation: 'TEXT CONTEXT',
       annotationPos: { x: 810, y: 475, align: 'start' },
       status: 'consistent',
     },
@@ -189,7 +189,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
       y: 470,
       portX: 290,
       portY: 450,
-      statusAnnotation: 'VOCODER ARTIFACT',
+      statusAnnotation: 'AUDIO EVIDENCE',
       annotationPos: { x: 190, y: 475, align: 'end' },
       status: 'conflict',
     },
@@ -377,10 +377,8 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
           {validationAlert?.modality === node.id && validationAlert.type === 'error'
             ? `✗ VALIDATION REJECTED`
             : uploadedFiles[node.id]
-            ? `✓ INGESTED: ${uploadedFiles[node.id]}`
-            : node.status === 'conflict'
-            ? `⚠ ${node.statusAnnotation}`
-            : `✓ ${node.statusAnnotation}`}
+            ? `FILE SELECTED: ${uploadedFiles[node.id]}`
+            : node.statusAnnotation}
         </text>
       </g>
     );
@@ -516,7 +514,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
         onChange={handleFileChange}
       />
 
-      {/* Floating Real-Time Field Validation Alert Banner */}
+      {/* Floating live field-validation alert banner */}
       {validationAlert && (
         <div className="absolute top-3 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 pointer-events-auto animate-fadeIn">
           <div className={`p-4 rounded-lg border backdrop-blur-2xl transition-all duration-300 shadow-[0_12px_40px_rgba(0,0,0,0.85)] ${
@@ -655,8 +653,8 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
             <stop offset="100%" stopColor="#030303" />
           </radialGradient>
 
-          {/* Outer glow aura */}
-          <radialGradient id="drumAura" cx="50%" cy="50%" r="50%">
+          {/* Outer radial glow */}
+          <radialGradient id="centerHaloGrad" cx="50%" cy="50%" r="50%">
             <stop offset="30%" stopColor="#ffffff" stopOpacity="0.15" />
             <stop offset="70%" stopColor="#22d3ee" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#050505" stopOpacity="0" />
@@ -675,7 +673,7 @@ export const TrustEngineVisualization: React.FC<TrustEngineVisualizationProps> =
         <ellipse cx={center.x} cy={center.y} rx="340" ry="185" fill="url(#glassDiscGrad)" />
         <ellipse cx={center.x} cy={center.y} rx="260" ry="145" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.8" strokeDasharray="5 7" />
         <ellipse cx={center.x} cy={center.y} rx="160" ry="88" fill="none" stroke="rgba(34,211,238,0.12)" strokeWidth="0.8" strokeDasharray="3 5" />
-        <ellipse cx={center.x} cy={center.y} rx="180" ry="100" fill="url(#drumAura)" />
+        <ellipse cx={center.x} cy={center.y} rx="180" ry="100" fill="url(#centerHaloGrad)" />
 
         {/* Cross-Modal Secondary Tendril Links */}
         {renderCrossModalLinks()}

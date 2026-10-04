@@ -5,6 +5,7 @@ import {
   Volume2, 
   FileText, 
   MessageSquare,
+  Database,
   ArrowRight,
   ShieldAlert,
   ShieldCheck,
@@ -19,40 +20,48 @@ export const SectionRelationalEvidence: React.FC = () => {
       id: 'image',
       label: 'IMAGE',
       icon: ImageIcon,
-      isolated: 'Looks authentic (Diffusion score within benign range)',
-      connected: 'Facial illumination angle conflicts with background shadows',
+      isolated: 'Visual signals considered on their own may not explain the full context.',
+      connected: 'Compare visible details with other sources and available context.',
       status: 'conflict'
     },
     {
       id: 'video',
       label: 'VIDEO',
       icon: VideoIcon,
-      isolated: 'Consistent frame rates and zero spatial blur artifacts',
-      connected: 'Lip micro-landmarks desynchronized with audio formants',
+      isolated: 'Frame-level signals describe this video, not its source history.',
+      connected: 'Review timing and visual relationships with any related audio.',
       status: 'conflict'
     },
     {
       id: 'audio',
       label: 'AUDIO',
       icon: Volume2,
-      isolated: 'High fidelity human voice timbre, no vocoder spikes',
-      connected: 'Reverb impulse response indicates indoor room, video is outdoors',
+      isolated: 'Acoustic signals need recording and source context.',
+      connected: 'Compare acoustic setting and timing with related visual evidence.',
       status: 'conflict'
     },
     {
       id: 'document',
       label: 'DOCUMENT',
       icon: FileText,
-      isolated: 'Authentic digital layout and font typography',
-      connected: 'Sign-off timestamp precedes video recording by 48 hours',
+      isolated: 'Document structure alone cannot establish provenance.',
+      connected: 'Compare document dates and context with other submitted sources.',
       status: 'conflict'
     },
     {
       id: 'text',
       label: 'TEXT',
       icon: MessageSquare,
-      isolated: 'Plausible grammatical phrasing and corporate vocabulary',
-      connected: 'Stylometric token entropy confirms synthetic LLM generation',
+      isolated: 'Language signals can be ambiguous without relevant context.',
+      connected: 'Review meaning and timeline against corroborating evidence.',
+      status: 'conflict'
+    },
+    {
+      id: 'metadata',
+      label: 'METADATA',
+      icon: Database,
+      isolated: 'Metadata can provide context, but its provenance may be incomplete.',
+      connected: 'Compare source details and timestamps with related evidence.',
       status: 'conflict'
     },
   ];
@@ -67,15 +76,14 @@ export const SectionRelationalEvidence: React.FC = () => {
         {/* Section Header */}
         <div className="max-w-3xl mb-16">
           <div className="text-xs font-mono tracking-[0.2em] uppercase text-[#737373] mb-3">
-            RELATIONAL FORENSICS
+            MULTIMODAL EVIDENCE
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] mb-6 font-sans">
-            ONE PIECE OF EVIDENCE<br />
-            IS NEVER THE WHOLE STORY.
+            Every signal tells<br />
+            part of the story.
           </h2>
           <p className="text-base sm:text-lg text-[#8A8A8A] leading-relaxed max-w-2xl font-sans">
-            Generative AI can make individual images, voices, videos and documents convincing. 
-            The strongest signals often appear in the relationships between them.
+            Images, video, audio, documents, text, and metadata each reveal different parts of an investigation. TrustLayer brings those signals together to build a more complete picture.
           </p>
         </div>
 
@@ -90,7 +98,7 @@ export const SectionRelationalEvidence: React.FC = () => {
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" />
-            <span>TRUSTLAYER CROSS-MODAL REASONING</span>
+            <span>CROSS-MODAL REASONING</span>
           </button>
 
           <button
@@ -111,18 +119,18 @@ export const SectionRelationalEvidence: React.FC = () => {
           
           <div className="text-[11px] font-mono uppercase text-[#737373] mb-8 flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <span>EVIDENCE CONDUIT GRAPH</span>
+              <span>INVESTIGATION · EVIDENCE SIGNALS</span>
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
             </span>
             <span className="text-neutral-400 font-normal">
               {viewMode === 'connected' 
-                ? '5 Modalities cross-referenced in real-time' 
-                : 'Siloed single-file inspectors (vulnerable to synthetic coherence)'}
+                ? 'Illustrative relationships across available evidence'
+                : 'Evidence signals considered individually'}
             </span>
           </div>
 
           {/* Horizontal Grid of Evidence Nodes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6 relative">
             {evidenceSteps.map((step, idx) => (
               <div 
                 key={step.id} 
@@ -146,7 +154,7 @@ export const SectionRelationalEvidence: React.FC = () => {
                   {viewMode === 'connected' ? (
                     <div className="space-y-2">
                       <div className="inline-flex items-center gap-1.5 text-[9.5px] font-mono text-amber-300 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/40 shadow-[0_0_8px_rgba(245,158,11,0.12)]">
-                        <span>⚠ CONTRADICTION DETECTED</span>
+                        <span>REVIEW RELATIONSHIP</span>
                       </div>
                       <p className="text-[#B3B3B3] text-xs">
                         {step.connected}
@@ -155,7 +163,7 @@ export const SectionRelationalEvidence: React.FC = () => {
                   ) : (
                     <div className="space-y-2">
                       <div className="inline-flex items-center gap-1.5 text-[9.5px] font-mono text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/40">
-                        <span>✓ PASSED STANDALONE</span>
+                        <span>INDIVIDUAL SIGNAL</span>
                       </div>
                       <p className="text-[#888] text-xs">
                         {step.isolated}
@@ -182,20 +190,20 @@ export const SectionRelationalEvidence: React.FC = () => {
               </div>
               <div>
                 <div className="text-xs font-bold tracking-widest uppercase text-white font-sans">
-                  TRUST ENGINE REASONING CORE
+                  TRUSTLAYER ASSESSMENT
                 </div>
                 <div className="text-[11px] font-mono text-[#8A8A8A]">
-                  Synthesizes cross-modal graph invariants to establish causal authenticity
+                  Connects evidence signals and context; conclusions remain limited by available sources
                 </div>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <div className="px-3 py-1 bg-[#121212] border border-[#242424] rounded text-[11px] font-mono text-[#AAA]">
-                CORRELATION MATRIX: <span className="text-white font-bold">ACTIVE</span>
+                EVIDENCE RELATIONSHIPS: <span className="text-white font-bold">IN VIEW</span>
               </div>
               <div className="px-3 py-1 bg-[#121212] border border-[#242424] rounded text-[11px] font-mono text-[#AAA]">
-                EPISTEMIC SENSITIVITY: <span className="text-cyan-400 font-bold">HIGH</span>
+                LIMITATIONS: <span className="text-cyan-400 font-bold">VISIBLE</span>
               </div>
             </div>
           </div>

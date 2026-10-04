@@ -7,35 +7,35 @@ export const SectionPipeline: React.FC = () => {
   const steps = [
     {
       num: '01',
-      title: 'COLLECT',
+      title: 'DETECT',
       icon: Layers,
-      summary: 'Upload available digital evidence.',
-      details: 'Ingests RAW visual streams, audio tracks, document payloads, sidecar EXIF/XMP metadata, and external capture time records into a unified cryptographically hashed evidence vault.',
-      keySignals: ['Tamper-evident ingest ledger', 'Sensor profile extraction', 'Multi-source stream alignment'],
+      summary: 'Identify meaningful signals across the available digital evidence.',
+      details: 'Bring images, video, audio, documents, text, and metadata into an investigation. What can be assessed depends on the sources provided.',
+      keySignals: ['Evidence extraction', 'Artifact analysis', 'Source context'],
     },
     {
       num: '02',
-      title: 'ANALYZE',
+      title: 'EXAMINE',
       icon: Search,
       summary: 'Analyze each available modality.',
-      details: 'Evaluates each modality in isolation for local synthetic footprints: diffusion noise variance in pixels, vocoder phase patterns in voice, vector layout artifacts in PDFs, and header anomalies.',
-      keySignals: ['PRNU photo response', 'Spectral acoustic harmonics', 'Glyph outline quantization'],
+      details: 'Review modality-specific indicators and preserve their context. An individual detector output is a signal to consider, not a final authenticity verdict.',
+      keySignals: ['Visual indicators', 'Acoustic context', 'Document structure'],
     },
     {
       num: '03',
       title: 'CONNECT',
       icon: GitCompare,
       summary: 'Find relationships and conflicts.',
-      details: 'The core innovation: maps physical, temporal, and semantic constraints across modalities. Tests whether lighting angle matches solar time, speech formants match facial muscular movement, and documents match metadata.',
-      keySignals: ['Phoneme-viseme temporal parity', 'Photometric solar consistency', 'Causal timestamp ordering'],
+      details: 'Connect sources to examine relevant timing, meaning, and contextual relationships. Correlations can surface questions and supporting evidence for further review.',
+      keySignals: ['Cross-modal reasoning', 'Signal relationships', 'Evidence correlation'],
     },
     {
       num: '04',
       title: 'EXPLAIN',
       icon: FileCheck,
       summary: 'Show evidence, uncertainty and limitations.',
-      details: 'Delivers an auditable, courtroom-ready forensic rationale. Explains why a conclusion was drawn, which relationships broke down, and precisely where uncertainty remains.',
-      keySignals: ['Contradiction proof path', 'Bayesian confidence bounds', 'Signed verification manifest'],
+      details: 'Present an explainable trust assessment with supporting signals, relevant context, confidence, and clear limitations. Conclusions reflect only the evidence available.',
+      keySignals: ['Trust assessment', 'Evidence graph', 'Limitations stated'],
     },
   ];
 
@@ -48,7 +48,7 @@ export const SectionPipeline: React.FC = () => {
       {/* Top Label Container */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
         <div className="text-xs font-mono tracking-[0.2em] uppercase text-[#737373] mb-3">
-          METHODOLOGY ARCHITECTURE
+          INVESTIGATION PROCESS
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export const SectionPipeline: React.FC = () => {
                   key={`r1-g1-${i}`}
                   className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] font-sans pr-10 sm:pr-14 lg:pr-16 whitespace-nowrap"
                 >
-                  FROM DETECTION
+                  FROM DETECTION.
                 </span>
               ))}
             </div>
@@ -78,7 +78,7 @@ export const SectionPipeline: React.FC = () => {
                   key={`r1-g2-${i}`}
                   className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] font-sans pr-10 sm:pr-14 lg:pr-16 whitespace-nowrap"
                 >
-                  FROM DETECTION
+                  FROM DETECTION.
                 </span>
               ))}
             </div>
@@ -95,7 +95,7 @@ export const SectionPipeline: React.FC = () => {
                   key={`r2-g1-${i}`}
                   className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] font-sans pr-10 sm:pr-14 lg:pr-16 whitespace-nowrap"
                 >
-                  TO INVESTIGATION.
+                  <span className="animate-shiny bg-clip-text text-transparent">TO INVESTIGATION.</span>
                 </span>
               ))}
             </div>
@@ -106,7 +106,7 @@ export const SectionPipeline: React.FC = () => {
                   key={`r2-g2-${i}`}
                   className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.12] font-sans pr-10 sm:pr-14 lg:pr-16 whitespace-nowrap"
                 >
-                  TO INVESTIGATION.
+                  <span className="animate-shiny bg-clip-text text-transparent">TO INVESTIGATION.</span>
                 </span>
               ))}
             </div>
@@ -118,8 +118,7 @@ export const SectionPipeline: React.FC = () => {
       {/* Main Section Content Container */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
         <p className="text-base sm:text-lg text-[#8A8A8A] leading-relaxed max-w-2xl font-sans mb-12">
-          Simple binary flags fail under modern adversarial pressure. 
-          TrustLayer replaces black-box classification with verifiable, multi-step investigative reasoning.
+          TrustLayer moves beyond isolated detection: identify evidence signals, examine their relationships, and communicate an explainable assessment with its limitations.
         </p>
 
         {/* Four Minimal Columns with Glass Panels */}
@@ -164,7 +163,7 @@ export const SectionPipeline: React.FC = () => {
                 {/* Key Signals */}
                 <div className="space-y-1.5 pt-2">
                   <div className="text-[10px] font-mono uppercase text-[#666] tracking-wider mb-2">
-                    FORENSIC PRIMITIVES
+                    EVIDENCE SIGNALS
                   </div>
                   {step.keySignals.map((sig) => (
                     <div key={sig} className="flex items-center gap-2 text-[11px] font-mono text-[#999]">
