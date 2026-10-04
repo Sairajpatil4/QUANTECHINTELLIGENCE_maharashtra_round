@@ -359,6 +359,8 @@ class FusionEngine:
 
         for item in evidence:
             for signal in item.signals:
+                if item.type == "text" and signal.category.lower() == "claim":
+                    continue
                 if signal.severity not in {"medium", "high"}:
                     continue
 
@@ -697,6 +699,13 @@ class FusionEngine:
         Semantic descriptions alone are not treated as authenticity
         analysis.
         """
+
+        if evidence.type == "text":
+            return any(
+                self._is_direct_manipulation_signal(signal)
+                for signal in evidence.signals
+                if signal.category.lower() != "claim"
+            )
 
         if evidence.signals:
             return True

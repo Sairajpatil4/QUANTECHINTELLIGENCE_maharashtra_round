@@ -266,7 +266,10 @@ Schema:
   "name": "compression_inconsistency",
   "severity": "medium",
   "confidence": 0.78,
-  "description": "Local compression characteristics differ from surrounding regions."
+  "description": "Local compression characteristics differ from surrounding regions.",
+  "category": "forensic",
+  "value": "regional compression variance",
+  "source": "image_forensics"
 }
 ```
 
@@ -282,7 +285,12 @@ Optional:
 
 ```text
 description
+category
+value
+source
 ```
+
+`value` may contain structured JSON data. Signal confidence describes the analyzer's confidence in that signal, not the probability that content is fake.
 
 ---
 
@@ -464,13 +472,25 @@ Limitations should be human-readable.
 
 # 18. Complete Text Evidence Example
 
+The current text analyzer accepts UTF-8 text files. PDF and office-document extraction is not configured; those uploads return an explicit limitation without being passed as text.
+
 ```json
 {
   "evidence_id": "ev_txt_001",
   "type": "text",
   "filename": null,
   "metadata": {},
-  "signals": [],
+  "signals": [
+    {
+      "name": "location_claim",
+      "category": "claim",
+      "severity": "low",
+      "confidence": 0.93,
+      "value": "Mumbai",
+      "description": "Text claims the event occurred in Mumbai.",
+      "source": "gemma_text"
+    }
+  ],
   "semantic_context": {
     "objects": [],
     "scene": "",
@@ -480,14 +500,12 @@ Limitations should be human-readable.
       "Mumbai"
     ],
     "claims": [
-      {
-        "text": "The image was taken in Mumbai on October 2.",
-        "location": "Mumbai",
-        "timestamp": "2026-10-02"
-      }
+      "The image was taken in Mumbai on October 2."
     ]
   },
-  "limitations": []
+  "limitations": [
+    "Gemma extraction confidence is uncalibrated and does not indicate claim truth."
+  ]
 }
 ```
 
