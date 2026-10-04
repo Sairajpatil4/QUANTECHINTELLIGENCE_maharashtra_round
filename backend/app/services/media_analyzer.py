@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from ai.fusion.schemas import Evidence as AnalyzerEvidence
@@ -59,11 +60,20 @@ class MediaAnalyzerIntegration:
 				else:
 					from ai.text.analyzer import analyze_text
 
-					analyzed_evidence = analyze_text(
-						text,
-						evidence_id,
-						filename=path.name,
-					)
+					text_model = os.getenv("TRUSTLAYER_TEXT_MODEL")
+					if text_model:
+						analyzed_evidence = analyze_text(
+							text,
+							evidence_id,
+							filename=path.name,
+							model=text_model,
+						)
+					else:
+						analyzed_evidence = analyze_text(
+							text,
+							evidence_id,
+							filename=path.name,
+						)
 		else:
 			return UnconfiguredAnalyzer().analyze(
 				evidence_id=evidence_id,

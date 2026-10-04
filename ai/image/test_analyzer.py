@@ -29,6 +29,12 @@ class AnalyzeImageTests(unittest.TestCase):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.image_path = Path(self.temp_dir.name) / "sample.png"
         Image.new("RGB", (32, 24), color="white").save(self.image_path)
+        forensics_patcher = patch(
+            "ai.image.analyzer2.analyze_forensics",
+            return_value=([], []),
+        )
+        forensics_patcher.start()
+        self.addCleanup(forensics_patcher.stop)
 
     def tearDown(self):
         self.temp_dir.cleanup()
@@ -130,6 +136,50 @@ class AnalyzeImageTests(unittest.TestCase):
         self.assertEqual(evidence.metadata["filename"], "invalid.txt")
         self.assertEqual(evidence.signals, [])
         self.assertTrue(evidence.limitations)
+
+    @patch("ai.image.analyzer2.analyze_forensics")
+    @patch("ai.image.analyzer2.urlopen")
+    def test_forensic_detector_signal_is_preserved(
+        self,
+        mocked_urlopen,
+        mocked_forensics,
+    ):
+        mocked_urlopen.return_value = FakeResponse(
+            {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "objects": [],
+                            "scene": "",
+                            "location_hint": None,
+                            "timestamp_hint": None,
+                            "entities": [],
+                        }
+                    )
+                }
+            }
+        )
+        mocked_forensics.return_value = (
+            [
+                {
+                    "name": "AI-generated image classifier score",
+                    "category": "ai_generation",
+                    "severity": "high",
+                    "confidence": 0.91,
+                    "value": {"ai_generated_class_score": 0.91},
+                    "description": "An AI-generation classifier indicator.",
+                    "source": "test_detector",
+                }
+            ],
+            ["Detector scope limitation."],
+        )
+
+        evidence = analyze_image(str(self.image_path), "ev_img_signal_001")
+
+        self.assertEqual(evidence.signals[0].category, "ai_generation")
+        self.assertEqual(evidence.signals[0].confidence, 0.91)
+        self.assertEqual(evidence.signals[0].source, "test_detector")
+        self.assertIn("Detector scope limitation.", evidence.limitations)
 
 
 if __name__ == "__main__":

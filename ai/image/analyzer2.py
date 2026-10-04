@@ -2,6 +2,7 @@
 
 import base64
 import json
+import os
 from io import BytesIO
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -116,8 +117,8 @@ def _analyze_visual_context(
 def analyze_image(
 	image_path: str,
 	evidence_id: str,
-	model: str = DEFAULT_MODEL,
-	ollama_url: str = DEFAULT_OLLAMA_URL,
+	model: Optional[str] = None,
+	ollama_url: Optional[str] = None,
 ) -> Evidence:
 	"""Analyze image metadata and visual context as common TrustLayer evidence."""
 	path = Path(image_path)
@@ -143,21 +144,22 @@ def analyze_image(
 		evidence["limitations"].append("The file is not a supported, readable image.")
 		return Evidence.model_validate(evidence)
 
-	_, forensic_limitations = analyze_forensics()
+	forensic_signals, forensic_limitations = analyze_forensics(str(path))
+	evidence["signals"].extend(forensic_signals)
 	evidence["limitations"].extend(forensic_limitations)
 
 	try:
 		evidence["semantic_context"] = _analyze_visual_context(
 			path,
-			model,
-			ollama_url,
+			model or os.getenv("TRUSTLAYER_IMAGE_MODEL", DEFAULT_MODEL),
+			ollama_url or os.getenv("TRUSTLAYER_OLLAMA_URL", DEFAULT_OLLAMA_URL),
 		)
 		evidence["limitations"].append(
 			"Gemma visual descriptions may be inaccurate and are not authenticity findings."
 		)
 	except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
 		evidence["limitations"].append(
-			"Ollama visual-context analysis was unavailable or returned an invalid response."
+			"Ollama visual-context analysis failed. Start Ollama, ensure the configured image model is installed, and check TRUSTLAYER_OLLAMA_URL; metadata and AI-generation screening were still attempted."
 		)
 
 	metadata = evidence["metadata"]

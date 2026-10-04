@@ -13,6 +13,10 @@ from app.services.integrations import IntegrationUnavailable, get_analyzer, get_
 
 router = APIRouter(prefix="/investigations", tags=["Analysis"])
 
+_LEGACY_IMAGE_DETECTOR_LIMITATION = (
+	"No dedicated image manipulation or AI-generation detector is configured."
+)
+
 
 def _now() -> str:
 	return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -138,7 +142,7 @@ def analyze_investigation(investigation_id: str) -> AnalysisResult:
 
 	if evidence_rows and len(evidence_rows) == 1:
 		limitations.append(
-			"Cross-modal verification was unavailable because only one evidence source was provided."
+			"Cross-modal verification was unavailable because only one evidence source was provided. Add an independent source, such as a related transcript, video, or second image, to enable comparisons."
 		)
 	if failed_evidence_ids and analyzed_evidence:
 		limitations.append("Analysis is incomplete because one or more evidence items could not be analyzed.")
@@ -209,7 +213,18 @@ def get_analysis_results(investigation_id: str) -> AnalysisResult:
 	if investigation is None:
 		raise APIError(404, "invalid_investigation", "Investigation not found.")
 	if stored is not None:
-		return AnalysisResult.model_validate_json(stored["result_json"])
+		result = AnalysisResult.model_validate_json(stored["result_json"])
+		for item in result.evidence:
+			if _LEGACY_IMAGE_DETECTOR_LIMITATION in item.limitations:
+				item.limitations = [
+					limitation
+					for limitation in item.limitations
+					if limitation != _LEGACY_IMAGE_DETECTOR_LIMITATION
+				]
+				item.limitations.append(
+					"This saved result predates the configured AI-generation classifier. Run the investigation again to analyze this image with the current backend."
+				)
+		return result
 
 	return _empty_result(
 		investigation_id,

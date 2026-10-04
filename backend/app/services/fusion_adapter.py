@@ -22,7 +22,10 @@ class TrustLayerFusionAdapter:
 	) -> AnalysisResult:
 		fusion_evidence = [self._to_fusion_evidence(item) for item in evidence]
 		result = FusionEngine().fuse(fusion_evidence)
-		return self._to_analysis_result(investigation_id, result)
+		return self._to_analysis_result(
+			investigation_id,
+			result.model_dump(mode="json"),
+		)
 
 	@staticmethod
 	def _to_fusion_evidence(item: StructuredEvidence) -> Evidence:
@@ -53,21 +56,19 @@ class TrustLayerFusionAdapter:
 	@staticmethod
 	def _to_analysis_result(
 		investigation_id: str,
-		result: FusionResult,
+		result: dict[str, Any],
 	) -> AnalysisResult:
 		converted_evidence = [
 			TrustLayerFusionAdapter._to_backend_evidence(item)
-			for item in result.evidence
+			for item in result["evidence"]
 		]
+		assessment = result["assessment"]
 		return AnalysisResult(
 			investigation_id=investigation_id,
 			status="completed",
-			assessment=result.assessment.model_dump(mode="json"),
-			findings=[
-				finding.model_dump(mode="json")
-				for finding in result.assessment.findings
-			],
-			limitations=result.assessment.limitations,
+			assessment=assessment,
+			findings=assessment["findings"],
+			limitations=assessment["limitations"],
 			evidence=converted_evidence,
 			evidence_graph={
 				"nodes": [
@@ -80,41 +81,38 @@ class TrustLayerFusionAdapter:
 				],
 				"edges": [
 					EvidenceGraphEdge(
-						source=relationship.source_evidence_id,
-						target=relationship.target_evidence_id,
-						relationship=relationship.relationship,
-						confidence=relationship.confidence,
-						explanation=relationship.explanation,
+						source=relationship["source_evidence_id"],
+						target=relationship["target_evidence_id"],
+						relationship=relationship["relationship"],
+						confidence=relationship["confidence"],
+						explanation=relationship["explanation"],
 					)
-					for relationship in result.relationships
+					for relationship in result["relationships"]
 				],
 			},
 		)
 
 	@staticmethod
-	def _to_backend_evidence(item: Evidence) -> StructuredEvidence:
-		metadata: dict[str, Any] = dict(item.metadata)
+	def _to_backend_evidence(item: dict[str, Any]) -> StructuredEvidence:
+		metadata = dict(item["metadata"])
 		filename = metadata.pop("filename", None)
 		return StructuredEvidence(
-			evidence_id=item.evidence_id,
-			type=item.type,
+			evidence_id=item["evidence_id"],
+			type=item["type"],
 			filename=filename,
 			metadata=metadata,
 			signals=[
 				{
-					"name": signal.name,
-					"severity": signal.severity,
-					"confidence": signal.confidence,
-					"description": signal.description,
-					"category": signal.category,
-					"value": signal.value,
-					"source": signal.source,
+					"name": signal["name"],
+					"severity": signal["severity"],
+					"confidence": signal["confidence"],
+					"description": signal["description"],
+					"category": signal["category"],
+					"value": signal["value"],
+					"source": signal["source"],
 				}
-				for signal in item.signals
+				for signal in item["signals"]
 			],
-			semantic_context=item.semantic_context.model_dump(
-				mode="json",
-				exclude_none=True,
-			),
-			limitations=item.limitations,
+			semantic_context=item["semantic_context"],
+			limitations=item["limitations"],
 		)

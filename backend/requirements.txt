@@ -3,6 +3,7 @@ pydantic>=2
 uvicorn
 python-multipart
 Pillow
+numpy>=1.26,<3
 opencv-python-headless>=4.10,<5
 torch>=2.2,<3
 transformers>=4.56.2,<5
