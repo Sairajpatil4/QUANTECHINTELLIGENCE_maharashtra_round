@@ -1,0 +1,1 @@
+"""Frame sampling and frame-level visual analysis helpers."""

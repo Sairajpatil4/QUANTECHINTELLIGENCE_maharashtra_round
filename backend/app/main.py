@@ -18,9 +18,11 @@ from app.routes.analysis import router as analysis_router
 from app.routes.evidence import router as evidence_router
 from app.routes.investigations import router as investigations_router
 from app.services.fusion_adapter import TrustLayerFusionAdapter
-from app.services.integrations import register_fusion
+from app.services.media_analyzer import MediaAnalyzerIntegration
+from app.services.integrations import register_analyzer, register_fusion
 
 
+register_analyzer(MediaAnalyzerIntegration())
 register_fusion(TrustLayerFusionAdapter())
 
 

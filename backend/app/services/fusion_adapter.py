@@ -37,10 +37,12 @@ class TrustLayerFusionAdapter:
 			signals=[
 				FusionSignal(
 					name=signal.name,
-					category="analyzer_signal",
+					category=signal.category or "analyzer_signal",
 					severity=signal.severity,
 					confidence=signal.confidence,
+					value=signal.value,
 					description=signal.description,
+					source=signal.source,
 				)
 				for signal in item.signals
 			],
@@ -104,6 +106,9 @@ class TrustLayerFusionAdapter:
 					"severity": signal.severity,
 					"confidence": signal.confidence,
 					"description": signal.description,
+					"category": signal.category,
+					"value": signal.value,
+					"source": signal.source,
 				}
 				for signal in item.signals
 			],

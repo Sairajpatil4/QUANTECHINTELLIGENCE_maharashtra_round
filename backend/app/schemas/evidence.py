@@ -13,6 +13,9 @@ class EvidenceSignal(BaseModel):
 	severity: Severity
 	confidence: float = Field(ge=0.0, le=1.0)
 	description: str | None = None
+	category: str | None = None
+	value: Any = None
+	source: str | None = None
 
 
 class StructuredEvidence(BaseModel):

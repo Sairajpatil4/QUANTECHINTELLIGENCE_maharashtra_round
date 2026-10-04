@@ -1,0 +1,1 @@
+"""Temporal consistency analysis across sampled video frames."""

@@ -1,4 +1,9 @@
 fastapi
-pydantic
+pydantic>=2
 uvicorn
 python-multipart
+Pillow
+opencv-python-headless>=4.10,<5
+torch>=2.2,<3
+transformers>=4.56.2,<5
+soundfile>=0.12,<1

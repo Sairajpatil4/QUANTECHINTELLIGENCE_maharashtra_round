@@ -1,0 +1,1 @@
+"""Entity, location, and date extraction helpers for text evidence."""
