@@ -28,6 +28,9 @@ export interface AnalysisResult {
       severity: 'low' | 'medium' | 'high';
       confidence: number;
       description?: string | null;
+      category?: string | null;
+      value?: unknown;
+      source?: string | null;
     }>;
     limitations: string[];
   }>;
