@@ -94,6 +94,27 @@ class FusionEngineTests(unittest.TestCase):
 		self.assertTrue(result.assessment.evidence_sufficiency.cross_modal_verification)
 		self.assertEqual(result.assessment.evidence_sufficiency.level, "moderate")
 
+	def test_same_modality_conflict_is_not_cross_modal_verification(self):
+		image_one = Evidence(
+			evidence_id="ev_image_1",
+			type="image",
+			semantic_context=SemanticContext(location_hint="Mumbai"),
+		)
+		image_two = Evidence(
+			evidence_id="ev_image_2",
+			type="image",
+			semantic_context=SemanticContext(location_hint="Pune"),
+		)
+		text = Evidence(
+			evidence_id="ev_text_1",
+			type="text",
+		)
+
+		result = self.engine.fuse([image_one, image_two, text])
+
+		self.assertEqual(len(result.relationships), 1)
+		self.assertFalse(result.assessment.evidence_sufficiency.cross_modal_verification)
+
 	def test_adapter_preserves_signal_category_and_value(self):
 		evidence = StructuredEvidence(
 			evidence_id="ev_image_1",

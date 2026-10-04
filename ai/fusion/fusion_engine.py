@@ -270,10 +270,21 @@ class FusionEngine:
             in self._COMPARISON_RELATIONSHIPS
         ]
 
-        cross_modal = (
-            len(modalities) >= 2
-            and bool(meaningful_comparisons)
-        )
+        evidence_by_id = {
+            item.evidence_id: item
+            for item in evidence
+        }
+        cross_modal = False
+        for relationship in meaningful_comparisons:
+            source = evidence_by_id.get(relationship.source_evidence_id)
+            target = evidence_by_id.get(relationship.target_evidence_id)
+            if (
+                source is not None
+                and target is not None
+                and source.type != target.type
+            ):
+                cross_modal = True
+                break
 
         detector_available = any(
             self._has_meaningful_analysis(item)
